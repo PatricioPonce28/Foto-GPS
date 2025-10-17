@@ -1,0 +1,7 @@
+{
+  "name": "fotogps",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
