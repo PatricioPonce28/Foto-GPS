@@ -1,20 +1,90 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Galería con Ubicación</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+<ion-content>
+  <!-- Información general -->
+  <div class="info-section" *ngIf="photoService.photos.length > 0">
+    <ion-text color="primary">
+      <h4>{{ photoService.photos.length }} foto(s) con ubicación</h4>
+    </ion-text>
+    <ion-text color="medium">
+      <small>Toca en "Ver en Mapa" para abrir la ubicación en Google Maps</small>
+    </ion-text>
   </div>
+
+  <!-- Galería de fotos -->
+  <ion-grid>
+    <ion-row>
+      <ion-col 
+        size="12" 
+        size-md="6"
+        *ngFor="let photo of photoService.photos; index as position"
+      >
+        <div class="photo-card">
+          <!-- Foto -->
+          <ion-img 
+            [src]="photo.webviewPath"
+            class="photo-image"
+            alt="Foto {{ position + 1 }}"
+          ></ion-img>
+
+          <!-- BOTÓN ELIMINAR (NUEVO) -->
+          <ion-button 
+            class="delete-button"
+            color="danger"
+            size="small"
+            fill="solid"
+            (click)="deletePhoto(photo, position)"
+          >
+            <ion-icon name="trash" slot="icon-only"></ion-icon>
+          </ion-button>
+          
+          <!-- Información de ubicación -->
+          <div class="location-info">
+            <div class="coordinates">
+              <small>
+                {{ photo.location.latitude | number:'1.4-4' }}, 
+                {{ photo.location.longitude | number:'1.4-4' }}
+              </small>
+            </div>
+            
+            <!-- Link a Google Maps -->
+            <ion-button 
+              size="small"
+              fill="outline"
+              color="primary"
+              (click)="openMaps(photo.location.latitude, photo.location.longitude)"
+              class="map-link"
+              [disabled]="photo.location.latitude === 0"
+            >
+              <ion-icon name="map" slot="start"></ion-icon>
+              Ver en Mapa
+            </ion-button>
+
+            <!-- Indicador si no hay ubicación -->
+            <div *ngIf="photo.location.latitude === 0" class="no-location">
+              <small>Sin ubicación</small>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Estado vacío -->
+  <div *ngIf="photoService.photos.length === 0" class="empty-state">
+    <ion-icon name="camera" class="empty-icon"></ion-icon>
+    <h3>No hay fotos en la galería</h3>
+    <p>Toca el botón de abajo para tomar una foto con ubicación</p>
+  </div>
+
+  <!-- Botón de cámara -->
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="addPhotoToGallery()" color="primary">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

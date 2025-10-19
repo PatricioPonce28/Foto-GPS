@@ -68,3 +68,28 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Ignorar carpetas de compilación y caché
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries/
+.DS_Store
+/build
+/captures
+/bin
+
+# Archivos específicos de Android Studio / IDE
+.iml
+*.iws
+*.ipr
+*.iml
+.settings
+.project
+
+# Archivos específicos de Capacitor/Ionic
+/node_modules
+/www
+.capacitor-cli.json
+.env
+
